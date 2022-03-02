@@ -1,0 +1,34 @@
+name: Get environment name
+description: Generates an environment name based on branch name.
+
+inputs:
+  project_key:
+    description: "Jira project key"
+    required: true
+    type: string
+    default: "PLATFORM"
+
+outputs:
+  environment:
+    description: "Environment name"
+    value: ${{ steps.generate.outputs.environment }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: generate
+      name: Generate environment name
+      shell: pwsh
+      env:
+        BRANCH: ${{ github.head_ref }}
+        PR_NUMBER: ${{ github.event.number }}
+      run: |
+        $featureBranchRegex = $env:BRANCH | Select-String -Pattern "^feature\/${{ inputs.project_key }}-([0-9]+)$"
+
+        if ($featureBranchRegex) {
+          $environment = ("${{ inputs.project_key }}" + $featureBranchRegex.Matches[0].Groups[1].Value).ToLower()
+        } else {
+          $environment = "pr" + $env:PR_NUMBER
+        }
+
+        echo "::set-output name=environment::$environment"
