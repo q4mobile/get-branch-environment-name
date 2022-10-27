@@ -6,7 +6,7 @@ A GitHub Action to generates an environment name based on branch name.
 
 ```yaml
 - name: Get environment name
-  uses: q4mobile/get-environment-name@latest
+  uses: q4mobile/get-branch-environment-name@latest
   with:
-    project_key: QP  # Jira project key
+    branch-name: PRDVOPS-XXX  # Jira project key
 ```
