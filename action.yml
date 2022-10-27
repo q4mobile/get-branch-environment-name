@@ -27,4 +27,4 @@ runs:
 
           #Replaces special characters with dashes (-) for things like environment and tags
           git_branch_sanitized=${git_branch//[^a-zA-Z0-9]/-}
-          echo "::set-output name=environment::${git_branch_sanitized,,}"
+          echo "environment=${git_branch_sanitized,,}" >> $GITHUB_OUTPUT
